@@ -6,10 +6,11 @@ import { Container } from "@mainamiru/react-native-ui";
 import { useQuery } from "@tanstack/react-query";
 import { desc } from "drizzle-orm";
 import { router } from "expo-router";
+import { RefreshControl } from "react-native";
 import { FAB } from "react-native-paper";
 
 const PostsScreen = () => {
-  const { data = [], isLoading } = useQuery({
+  const { data, isLoading, refetch, isRefetching } = useQuery({
     queryKey: ["posts"],
     queryFn: async () => {
       return await getPosts().orderBy(desc(posts.createdAt));
@@ -21,6 +22,9 @@ const PostsScreen = () => {
       <LegendList
         data={data}
         recycleItems={true}
+        refreshControl={
+          <RefreshControl onRefresh={refetch} refreshing={isRefetching} />
+        }
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <PostCard post={item} />}
         contentContainerStyle={{
