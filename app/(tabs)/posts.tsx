@@ -1,3 +1,4 @@
+import { PostCard } from "@/components";
 import { posts } from "@/db/schema";
 import { getPosts } from "@/services";
 import { LegendList } from "@legendapp/list/react-native";
@@ -5,7 +6,7 @@ import { Container } from "@mainamiru/react-native-ui";
 import { useQuery } from "@tanstack/react-query";
 import { desc } from "drizzle-orm";
 import { router } from "expo-router";
-import { FAB, List } from "react-native-paper";
+import { FAB } from "react-native-paper";
 
 const PostsScreen = () => {
   const { data = [], isLoading } = useQuery({
@@ -21,9 +22,11 @@ const PostsScreen = () => {
         data={data}
         recycleItems={true}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <List.Item title={item.title} description={item.content} />
-        )}
+        renderItem={({ item }) => <PostCard post={item} />}
+        contentContainerStyle={{
+          gap: 10,
+          padding: 16,
+        }}
       />
       <FAB
         icon="plus"
