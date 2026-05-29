@@ -1,5 +1,6 @@
 import { queryClient } from "@/client";
 import { db } from "@/db";
+import { users } from "@/db/schema";
 import { Center } from "@mainamiru/react-native-ui";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
@@ -24,9 +25,20 @@ const RootLayout = () => {
   React.useEffect(() => {
     if (success) {
       SplashScreen.hideAsync();
+
+      // remove this in prduction
+      db.insert(users)
+        .values({
+          id: 1,
+          name: "John Doe",
+          email: "test@example.com",
+        })
+        .onConflictDoNothing()
+        .catch((error) => {
+          console.log("Error: ", error);
+        });
     } else if (error) {
       SplashScreen.hideAsync();
-      console.log("Error: ", error);
     }
   }, [success, error]);
 

@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { Home } from "lucide-react-native";
+import { FileText, Home, User } from "lucide-react-native";
 
 const TabsLayout = () => {
   return (
@@ -15,14 +15,16 @@ const TabsLayout = () => {
         name="posts"
         options={{
           title: "Posts",
-          tabBarIcon: ({ size, color }) => <Home size={size} color={color} />,
+          tabBarIcon: ({ size, color }) => (
+            <FileText size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: "Profile",
-          tabBarIcon: ({ size, color }) => <Home size={size} color={color} />,
+          tabBarIcon: ({ size, color }) => <User size={size} color={color} />,
         }}
       />
     </Tabs>
