@@ -9,7 +9,7 @@ export function useLocalStorage<T>(key: string, initialValue: T | null = null) {
   const parseValue = (value: any) => {
     try {
       return JSON.parse(value);
-    } catch (error) {
+    } catch {
       return value;
     }
   };

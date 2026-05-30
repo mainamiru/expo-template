@@ -1,12 +1,10 @@
 import { PostCard } from "@/components";
 import { Spacing } from "@/constants/theme";
-import { posts } from "@/db/schema";
 import { useTheme } from "@/hooks/use-theme";
 import { getPosts, getUsers } from "@/services";
 import { LegendList } from "@legendapp/list/react-native";
 import { Container } from "@mainamiru/react-native-ui";
 import { useQuery } from "@tanstack/react-query";
-import { desc } from "drizzle-orm";
 import { router } from "expo-router";
 import { View } from "react-native";
 import { Card, Text } from "react-native-paper";
@@ -18,16 +16,12 @@ const HomeScreen = () => {
 
   const { data: postsData, isLoading: postsLoading } = useQuery({
     queryKey: ["posts"],
-    queryFn: async () => {
-      return await getPosts().orderBy(desc(posts.createdAt));
-    },
+    queryFn: async () => await getPosts(),
   });
 
   const { data: usersData, isLoading: usersLoading } = useQuery({
     queryKey: ["users"],
-    queryFn: async () => {
-      return await getUsers();
-    },
+    queryFn: async () => await getUsers(),
   });
 
   const recentPosts = postsData?.slice(0, RECENT_POSTS_LIMIT) ?? [];

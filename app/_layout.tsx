@@ -1,12 +1,13 @@
 import { queryClient } from "@/client";
-import { db } from "@/db";
 import { users } from "@/db/schema";
+import { useDatabase } from "@/hooks";
 import { Center } from "@mainamiru/react-native-ui";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import React from "react";
+import { SQLiteProvider } from "expo-sqlite";
+import React, { Suspense } from "react";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { PaperProvider, Text } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -19,7 +20,8 @@ export const unstable_settings = {
   initialRouteName: "(tabs)",
 };
 
-const RootLayout = () => {
+const RootStack = () => {
+  const db = useDatabase();
   const { success, error } = useMigrations(db, migrations);
 
   // hide splash screen when migrations are successful
@@ -41,7 +43,7 @@ const RootLayout = () => {
     } else if (error) {
       SplashScreen.hideAsync();
     }
-  }, [success, error]);
+  }, [success, error, db]);
 
   if (error) {
     return (
@@ -57,23 +59,30 @@ const RootLayout = () => {
     );
   } else {
     return (
-      <KeyboardProvider statusBarTranslucent>
-        <QueryClientProvider client={queryClient}>
-          <SafeAreaProvider style={{ flex: 1 }}>
-            <PaperProvider>
-              <Stack initialRouteName="(tabs)">
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen
-                  name="(protected)"
-                  options={{ headerShown: false }}
-                />
-              </Stack>
-            </PaperProvider>
-          </SafeAreaProvider>
-        </QueryClientProvider>
-      </KeyboardProvider>
+      <Stack initialRouteName="(tabs)">
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(protected)" options={{ headerShown: false }} />
+      </Stack>
     );
   }
+};
+
+const RootLayout = () => {
+  return (
+    <KeyboardProvider statusBarTranslucent>
+      <QueryClientProvider client={queryClient}>
+        <SafeAreaProvider style={{ flex: 1 }}>
+          <PaperProvider>
+            <Suspense fallback={<Text>Loading...</Text>}>
+              <SQLiteProvider useSuspense databaseName="myapp.db">
+                <RootStack />
+              </SQLiteProvider>
+            </Suspense>
+          </PaperProvider>
+        </SafeAreaProvider>
+      </QueryClientProvider>
+    </KeyboardProvider>
+  );
 };
 
 export default RootLayout;
