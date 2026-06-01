@@ -57,7 +57,8 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "reset-project": "rm -rf src app drizzle"
   },
   "private": true
 }

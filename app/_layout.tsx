@@ -72,8 +72,14 @@ const RootLayout = () => {
     <KeyboardProvider statusBarTranslucent>
       <QueryClientProvider client={queryClient}>
         <SafeAreaProvider style={{ flex: 1 }}>
-          <PaperProvider>
-            <Suspense fallback={<Text>Loading...</Text>}>
+          <PaperProvider theme={{ dark: false }}>
+            <Suspense
+              fallback={
+                <Center flex={1} padding={10}>
+                  <Text>Loading...</Text>
+                </Center>
+              }
+            >
               <SQLiteProvider useSuspense databaseName="myapp.db">
                 <RootStack />
               </SQLiteProvider>

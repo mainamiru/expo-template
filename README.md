@@ -216,6 +216,30 @@ Displays the default user (id: 1) with avatar initials, name, email, post count,
 
 Form with title and content fields, validated with Zod. On successful submission, invalidates the posts query and navigates back.
 
+## API Routes
+
+Expo Router supports [API routes](https://docs.expo.dev/router/reference/api-routes/) using the `+api` filename suffix. Files in `app/api/` are served as server-side endpoints (web-only).
+
+### `GET /api/hello`
+
+Returns a JSON greeting.
+
+**File:** `app/api/hello+api.ts`
+
+```ts
+export async function GET() {
+  return Response.json({ hello: "world" });
+}
+```
+
+**Response:**
+
+```json
+{ "hello": "world" }
+```
+
+Add new API routes by creating files in `app/api/` with the `+api.ts` suffix (e.g. `app/api/users+api.ts` for `GET /api/users`).
+
 ## Scripts
 
 | Command               | Description                                      |

@@ -20,13 +20,14 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "output": "static",
+      "output": "server",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       [
         "expo-router",
         {
+          "origin": "https://evanbacon.dev",
           "headers": {
             "Cross-Origin-Opener-Policy": "same-origin",
             "Cross-Origin-Embedder-Policy": "credentialless"
